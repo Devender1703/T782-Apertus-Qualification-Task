@@ -43,12 +43,12 @@ int main(int argc, char* argv[])
     
    uint8_t *mainbuffer = new uint8_t[width * height];
     
-   int jdx = 0;
-   for (int idx = 0; idx < length; idx += 3)
+   int Count1= 0;
+   for (int count= 0; count< length; count+= 3)
    {
      mainbuffer[jdx] = buffer[idx];
-     mainbuffer[jdx + 1] = ((buffer[idx + 1] & (0x0F)) << 4 | (buffer[idx + 2] >> 4));
-     jdx += 2;
+     mainbuffer[Count1+ 1] = ((buffer[count+ 1] & (0x0F)) << 4 | (buffer[count+ 2] >> 4));
+     Count1+= 2;
    }
 
    raw.close();
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 
    Image.BilinearInterpolation(mainbuffer);
    Image.ConvertlayerToPpm("Final_image");
-  
+ 
    MakeAVIFile(Image.final_image, width, height, framecount);
 
    return 0;
