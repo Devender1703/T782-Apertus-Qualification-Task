@@ -6,8 +6,6 @@
 
 #include "AVIStruct.h"
 
-using namespace std;
-
 #define AVISize                 sizeof(List) - 2 * sizeof(uint32_t) + FindSize("hdrl") + FindSize("movi")
 #define hdrlSize                sizeof(List) - 2 * sizeof(uint32_t) + FindSize("avih") + FindSize("strl")      
 #define strlSize                sizeof(List) - 2 * sizeof(uint32_t) + FindSize("strh") + FindSize("strf")            
@@ -29,42 +27,36 @@ uint32_t MakeFourCC(std::string type)
 
 }
 
-
 unsigned long int AviCreator::FindSize(std::string type)
 {
    
    if(type == "avi ")
    {
       header_map["avi "] = AVISize; 
-
       return (header_map["avi "] + 2 * sizeof(uint32_t));
    }
    
    if(type == "hdrl")
    {
       header_map["hdrl"] = hdrlSize;
-
       return ( header_map["hdrl"] + 2 * sizeof(uint32_t));
    }
     
    if(type == "strl")
    {
-      header_map["strl"] = strlSize;
-                                    
+      header_map["strl"] = strlSize;                                 
       return (header_map["strl"]  + 2 * sizeof(uint32_t));
    }
     
    if(type == "strh") 
    {
       header_map["strh"] = AVIStreamHeaderSize;
-
       return header_map["strh"]; 
    }
   
    if(type == "strf")
    {
       header_map["strf"] =  BitmapInfoHeaderSize;
-
       return header_map["strf"] + sizeof(uint32_t);
    }
   
@@ -78,10 +70,56 @@ unsigned long int AviCreator::FindSize(std::string type)
    {
        unsigned long int value = framecount * height * width;
        header_map["movi"] = MoviSize;
-
        return header_map["movi"] + 2 * sizeof(uint32_t);
    }
 
    return 0;
+}  
+
+void AviCreator::AddNode(AviCreator Avi, std::string type, int &offset, uint8_t *buffer)
+{
+   
+   if(type == "avi ")
+   {
+      Avi.MakeRiffHeader(offset, buffer); 
+      AddNode(Avi, "hdrl", offset, buffer);
+      AddNode(Avi, "movi", offset, buffer);
+   }
+   
+   if(type == "hdrl")
+   {
+      Avi.MakeHdrlHeader(offset, buffer);
+      AddNode(Avi, "avih", offset, buffer);
+      AddNode(Avi, "strl", offset, buffer);
+   }
+    
+   if(type == "strl")
+   {
+      Avi.MakeStrlHeader(offset,  buffer);
+      AddNode(Avi, "strh", offset, buffer);
+      AddNode(Avi, "strf", offset, buffer);                              
+   }
+    
+   if(type == "strh") 
+   {
+      Avi.MakeStrhHeader(offset, buffer);
+   }
+  
+   if(type == "strf")
+   {
+      Avi.MakeStrfHeader(offset, buffer); 
+      Avi.MakeBitHeader(offset, buffer);  
+   }
+  
+   if(type == "avih")
+   {
+      Avi.MakeAvihHeader(offset, buffer);
+   }
+  
+   if(type == "movi")
+   {
+      Avi.MakeMoviHeader(offset, buffer);
+   }
+   
 }  
 

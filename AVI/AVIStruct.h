@@ -13,7 +13,6 @@
 #include <unordered_map>
 #include <cstring>
 
-
 struct List
 {
    uint32_t FourCC;
@@ -86,7 +85,6 @@ struct BitmapInfoHeader
    uint32_t ClrImportant;
 };
 
-
 class AviCreator
 {
    int height;
@@ -105,22 +103,24 @@ public:
    std::unordered_map<std::string, unsigned long int> header_map;
 
    unsigned long int FindSize(std::string);
-
-   List MakeRiffHeader();
-
-   List MakeHdrlHeader();
-
-   AVIMainHeader MakeAvihHeader();
-
-   List MakeStrlHeader();
-
-   AVIStreamHeader MakeStrhHeader(); 
    
-   Chunk MakeStrfHeader();
-   
-   BitmapInfoHeader MakeBitHeader();
+   void AddNode(AviCreator, std::string, int&, uint8_t*);
 
-   List MakeMoviHeader();
+   void MakeRiffHeader(int&, uint8_t*);
+
+   void MakeHdrlHeader(int&, uint8_t*);
+
+   void MakeAvihHeader(int&, uint8_t*);
+
+   void MakeStrlHeader(int&, uint8_t*);
+
+   void MakeStrhHeader(int&, uint8_t*); 
+   
+   void MakeStrfHeader(int&, uint8_t*);
+   
+   void MakeBitHeader(int&, uint8_t*);
+
+   void MakeMoviHeader(int&, uint8_t*);
 
 };
 

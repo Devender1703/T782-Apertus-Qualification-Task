@@ -11,22 +11,20 @@
 #include "ConvertImage/ConversionHelper.h"
 #include "AVI/AVIStruct.h"
 
-using namespace std;
-
 int main(int argc, char* argv[])
 {  
    if(argc != 5)
    {
-     cout << "ERROR : Argument missing" <<endl;
+     std::cout << "ERROR : Argument missing" <<std::endl;
      return 0;
    }   
 
-   ifstream raw;
-   raw.open(argv[4], ios::binary);
+   std::ifstream raw;
+   raw.open(argv[4], std::ios::binary);
     
    if (!raw)
    {
-     cout << "ERROR: file is not opening" << endl;
+     std::cout << "ERROR: file is not opening" << std::endl;
      return 0;
    } 
      
@@ -34,21 +32,21 @@ int main(int argc, char* argv[])
    int height = atoi(argv[2]);
    int framecount = atoi(argv[3]); 
  
-   raw.seekg(0, ios::end);
+   raw.seekg(0, std::ios::end);
    long long int length = raw.tellg();
-   raw.seekg(0, ios::beg);
+   raw.seekg(0, std::ios::beg);
        
    uint8_t *buffer = new uint8_t[length];
    raw.read((char *)buffer, length);
     
    uint8_t *mainbuffer = new uint8_t[width * height];
     
-   int Count1= 0;
-   for (int count= 0; count< length; count+= 3)
+   int count1= 0;
+   for (int count= 0; count < length; count += 3)
    {
-     mainbuffer[jdx] = buffer[idx];
-     mainbuffer[Count1+ 1] = ((buffer[count+ 1] & (0x0F)) << 4 | (buffer[count+ 2] >> 4));
-     Count1+= 2;
+     mainbuffer[count1] = buffer[count];
+     mainbuffer[count1 + 1] = ((buffer[count + 1] & (0x0F)) << 4 | (buffer[count + 2] >> 4));
+     count1+= 2;
    }
 
    raw.close();

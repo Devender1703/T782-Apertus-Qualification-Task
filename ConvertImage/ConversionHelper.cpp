@@ -9,8 +9,6 @@
 #include <cstring>
 #include "ConversionHelper.h"
 
-using namespace std;
-
 void ConversionToImage::ExtractChannels(uint8_t *buffer)
 {
    long long int evenOdd = 1, count1 = 0, count2 = 0;
@@ -74,10 +72,10 @@ void ConversionToImage::BilinearInterpolation(uint8_t *buffer)
    }
 }
 
-void ConversionToImage::PrintPixels(uint8_t *tile, string channelname)
+void ConversionToImage::PrintPixels(uint8_t *tile, std::string channelname)
 {
 
-   cout << "5*5 pixels for" << channelname <<" "<<"channel" << endl;
+   std::cout << "5*5 pixels for" << channelname <<" "<<"channel" << std::endl;
 
    for (int count = 0; count < 5; count++)
    {
@@ -87,39 +85,38 @@ void ConversionToImage::PrintPixels(uint8_t *tile, string channelname)
      printf("%x ", tile[width * count + 3]);
      printf("%x ", tile[width * count + 4]);
 
-     cout << endl;
+     std::cout << std::endl;
    }
 }
 
-void ConversionToImage::ConvertlayerToPgm(uint8_t *GrayScale, string ChannelName)
+void ConversionToImage::ConvertlayerToPgm(uint8_t *GrayScale, std::string ChannelName)
 {
+   std::ofstream file;
 
-   ofstream file;
+   file.open(ChannelName, std::ios::binary);
 
-   file.open(ChannelName, ios::binary);
+   file << "P5" << std::endl;
+   file << graywidth << std::endl;
+   file << grayheight << std::endl;
+   file << "255" << std::endl;
 
-   file.write("P5 ", 3);
-   file << graywidth <<" ";
-   file << grayheight <<"\n";
-   file.write("255 ", 4);
    file.write(reinterpret_cast<char *>(GrayScale), graywidth * grayheight);
 
-   cout << ChannelName << ".pgm is ready" << endl;
+   std::cout << ChannelName << ".pgm is ready" << std::endl;
 }
 
-void ConversionToImage::ConvertlayerToPpm(string ChannelName)
+void ConversionToImage::ConvertlayerToPpm(std::string ChannelName)
 {
+   std::ofstream file;
 
-   ofstream file;
+   file.open(ChannelName, std::ios::binary);
 
-   file.open(ChannelName, ios::binary);
-
-   file.write("P6 ", 3);
-   file << width <<" ";
-   file << height <<"\n";
-   file.write("255 ", 4);
+   file << "P6" << std::endl;
+   file << width << std::endl;
+   file << height << std::endl;
+   file << "255" << std::endl;
    file.write(reinterpret_cast<char *>(final_image), width * height * 3);
 
-   cout << ChannelName << ".ppm is ready" << endl;
+   std::cout << ChannelName << ".ppm is ready" << std::endl;
 }
 
