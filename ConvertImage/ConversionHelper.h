@@ -18,7 +18,7 @@ class ConversionToImage
 
    public: 
 
-   uint8_t *final_image;
+   uint8_t *debayeredchannel;
    uint8_t *red;
    uint8_t *green1;
    uint8_t *green2;
@@ -26,15 +26,13 @@ class ConversionToImage
 
    ConversionToImage(int _width, int _height)
    {
-     width = _width;
-     height = _height;
-     graywidth = _width/2;
-     grayheight = _height/2;
+     width      = _width;
+     height     = _height;
+     graywidth  = _width / 2;
+     grayheight = _height / 2;
    }
  
-   void ConvertlayerToPgm(uint8_t *, std::string);
- 
-   void ConvertlayerToPpm(std::string);
+   void ConvertlayerToImage(bool , uint8_t *, std::string);
 
    void ExtractChannels(uint8_t *);
 

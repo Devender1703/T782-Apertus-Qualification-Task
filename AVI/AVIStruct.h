@@ -95,8 +95,8 @@ public:
 
    AviCreator(int _height, int _width, int _framecount)
    {  
-      height = _height;
-      width =  _width;    
+      height     = _height;
+      width      = _width;    
       framecount = _framecount;
    }
    

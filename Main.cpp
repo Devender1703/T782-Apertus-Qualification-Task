@@ -28,8 +28,8 @@ int main(int argc, char* argv[])
      return 0;
    } 
      
-   int width  = atoi(argv[1]);
-   int height = atoi(argv[2]);
+   int width      = atoi(argv[1]);
+   int height     = atoi(argv[2]);
    int framecount = atoi(argv[3]); 
  
    raw.seekg(0, std::ios::end);
@@ -38,15 +38,15 @@ int main(int argc, char* argv[])
        
    uint8_t *buffer = new uint8_t[length];
    raw.read((char *)buffer, length);
-    
+   
    uint8_t *mainbuffer = new uint8_t[width * height];
-    
+  
    int count1= 0;
    for (int count= 0; count < length; count += 3)
    {
-     mainbuffer[count1] = buffer[count];
+     mainbuffer[count1]     = buffer[count];
      mainbuffer[count1 + 1] = ((buffer[count + 1] & (0x0F)) << 4 | (buffer[count + 2] >> 4));
-     count1+= 2;
+     count1 += 2;
    }
 
    raw.close();
@@ -60,15 +60,15 @@ int main(int argc, char* argv[])
    Image.PrintPixels(Image.green2, "green2");
    Image.PrintPixels(Image.blue, "blue");
 
-   Image.ConvertlayerToPgm(Image.red, "Red");
-   Image.ConvertlayerToPgm(Image.green1, "Green1");
-   Image.ConvertlayerToPgm(Image.green2, "Green2");
-   Image.ConvertlayerToPgm(Image.blue, "Blue");
+   Image.ConvertlayerToImage(false, Image.red, "Red.pgm");
+   Image.ConvertlayerToImage(false, Image.green1, "Green1.pgm");
+   Image.ConvertlayerToImage(false, Image.green2, "Green2.pgm");
+   Image.ConvertlayerToImage(false, Image.blue, "Blue.pgm");
 
    Image.BilinearInterpolation(mainbuffer);
-   Image.ConvertlayerToPpm("Final_image");
+   Image.ConvertlayerToImage(true, Image.debayeredchannel, "DebayeredImage.ppm");
  
-   MakeAVIFile(Image.final_image, width, height, framecount);
+   MakeAVIFile(Image.debayeredchannel, width, height, framecount);
 
    return 0;
 }
