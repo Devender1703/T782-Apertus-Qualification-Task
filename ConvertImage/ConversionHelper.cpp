@@ -13,10 +13,10 @@ void ConversionToImage::ExtractChannels(uint8_t *buffer)
 {
    long evenOdd = 1, count1 = 0, count2 = 0;
    
-   red = new uint8_t[graywidth * grayheight]; 
-   green1 = new uint8_t[graywidth * grayheight]; 
-   green2 = new uint8_t[graywidth * grayheight]; 
-   blue = new uint8_t[graywidth * grayheight]; 
+   red = new uint8_t[grayWidth * grayHeight]; 
+   green1 = new uint8_t[grayWidth * grayHeight]; 
+   green2 = new uint8_t[grayWidth * grayHeight]; 
+   blue = new uint8_t[grayWidth * grayHeight]; 
      
    for (int count = 0; count < width * height; count += 2)
    {
@@ -41,7 +41,7 @@ void ConversionToImage::ExtractChannels(uint8_t *buffer)
 void ConversionToImage::BilinearInterpolation(uint8_t *buffer)
 {
    long evenOdd = 1;
-   debayeredchannel = new uint8_t[width * height * 3];
+   debayeredChannel = new uint8_t[width * height * 3];
    
    for (long long count = 0; count < width * height; count += 2)
    {
@@ -52,28 +52,29 @@ void ConversionToImage::BilinearInterpolation(uint8_t *buffer)
 
       if (evenOdd % 2 != 0)
       {
-        debayeredchannel[triple]     = buffer[count];
-        debayeredchannel[triple + 1] = buffer[count + 1];
-        debayeredchannel[triple + 2] = buffer[count + 4097];
-        debayeredchannel[triple + 3] = buffer[count];
-        debayeredchannel[triple + 4] = buffer[count + 1];
-        debayeredchannel[triple + 5] = buffer[count + 4097];
+        debayeredChannel[triple]     = buffer[count];
+        debayeredChannel[triple + 1] = buffer[count + 1];
+        debayeredChannel[triple + 2] = buffer[count + 4097];
+        debayeredChannel[triple + 3] = buffer[count];
+        debayeredChannel[triple + 4] = buffer[count + 1];
+        debayeredChannel[triple + 5] = buffer[count + 4097];
       }
       else
       {
-        debayeredchannel[triple]     = buffer[count - 4096];
-        debayeredchannel[triple + 1] = buffer[count];
-        debayeredchannel[triple + 2] = buffer[count + 1];
-        debayeredchannel[triple + 3] = buffer[count - 4096];
-        debayeredchannel[triple + 4] = buffer[count];
-        debayeredchannel[triple + 5] = buffer[count + 1];
+        debayeredChannel[triple]     = buffer[count - 4096];
+        debayeredChannel[triple + 1] = buffer[count];
+        debayeredChannel[triple + 2] = buffer[count + 1];
+        debayeredChannel[triple + 3] = buffer[count - 4096];
+        debayeredChannel[triple + 4] = buffer[count];
+        debayeredChannel[triple + 5] = buffer[count + 1];
       }
    }
 }
 
-void ConversionToImage::PrintPixels(uint8_t *tile, std::string channelname)
+void ConversionToImage::PrintPixels(uint8_t *tile, std::string channelName)
 {
-   std::cout << "5*5 pixels for" << channelname <<" "<<"channel" << std::endl;
+   std::cout << "5*5 pixels for" << channelName <<" "<<"channel" << std::endl;
+   
 
    for (int count = 0; count < 5; count++)
    {
@@ -87,11 +88,11 @@ void ConversionToImage::PrintPixels(uint8_t *tile, std::string channelname)
    }
 }
 
-void ConversionToImage::ConvertlayerToImage(bool isdebayered, uint8_t *data, std::string ChannelName)
+void ConversionToImage::ConvertlayerToImage(bool isDebayered, uint8_t *data, std::string channelName)
 {
    std::ofstream file;
 
-   file.open(ChannelName, std::ios::binary);
+   file.open(channelName, std::ios::binary);
    
    if(!file)
    {
@@ -99,18 +100,15 @@ void ConversionToImage::ConvertlayerToImage(bool isdebayered, uint8_t *data, std
       return;
    }
 
-   file << (isdebayered ? "P6" : "P5");
-   file << std::endl;
-   file << (isdebayered ? width : graywidth);
-   file << std::endl;
-   file << (isdebayered ? height : grayheight);
-   file << std::endl;
+   file << (isDebayered ? "P6" : "P5") << std::endl;
+   file << (isDebayered ? width : grayWidth) << std::endl;
+   file << (isDebayered ? height : grayHeight) << std::endl;
    file << "255" << std::endl;
    
-   int size_to_write; 
-   (isdebayered ? size_to_write = width * height * 3 : size_to_write = graywidth * grayheight);
+   int sizeToWrite; 
+   (isDebayered ? sizeToWrite = width * height * 3 : sizeToWrite = grayWidth * grayHeight);
       
-   file.write(reinterpret_cast<char*>(data), size_to_write);
-   std::cout << ChannelName << ".pgm is ready" << std::endl;
+   file.write(reinterpret_cast<char*>(data), sizeToWrite);
+   std::cout << channelName << " is ready" << std::endl;
 }
 

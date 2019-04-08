@@ -12,7 +12,7 @@
 #define AVIStreamHeaderSize     sizeof(AVIStreamHeader)
 #define BitmapInfoHeaderSize    sizeof(Chunk) - sizeof(uint32_t) + sizeof(BitmapInfoHeader)
 #define AVIMainHeaderSize       sizeof(AVIMainHeader)
-#define MoviSize                (sizeof(List) - 2 * sizeof(uint32_t) + framecount * sizeof(Chunk) + value * 3)
+#define MoviSize                (sizeof(List) - 2 * sizeof(uint32_t) + frameCount * sizeof(Chunk) + value * 3)
 
 
 uint32_t MakeFourCC(std::string type)
@@ -29,52 +29,52 @@ unsigned long int AviCreator::FindSize(std::string type)
 {
    if(type == "avi ")
    {
-      header_map["avi "] = AVISize; 
+      headerMap["avi "] = AVISize; 
 
-      return (header_map["avi "] + 2 * sizeof(uint32_t));
+      return (headerMap["avi "] + 2 * sizeof(uint32_t));
    }
    
    if(type == "hdrl")
    {
-      header_map["hdrl"] = hdrlSize;
+      headerMap["hdrl"] = hdrlSize;
 
-      return ( header_map["hdrl"] + 2 * sizeof(uint32_t));
+      return ( headerMap["hdrl"] + 2 * sizeof(uint32_t));
    }
     
    if(type == "strl")
    {
-      header_map["strl"] = strlSize;                                 
+      headerMap["strl"] = strlSize;                                 
 
-      return (header_map["strl"]  + 2 * sizeof(uint32_t));
+      return (headerMap["strl"]  + 2 * sizeof(uint32_t));
    }
     
    if(type == "strh") 
    {
-      header_map["strh"] = AVIStreamHeaderSize;
+      headerMap["strh"] = AVIStreamHeaderSize;
 
-      return header_map["strh"]; 
+      return headerMap["strh"]; 
    }
   
    if(type == "strf")
    {
-      header_map["strf"] = BitmapInfoHeaderSize;
+      headerMap["strf"] = BitmapInfoHeaderSize;
 
-      return header_map["strf"] + sizeof(uint32_t);
+      return headerMap["strf"] + sizeof(uint32_t);
    }
   
    if(type == "avih")
    {
-      header_map["avih"] = AVIMainHeaderSize;
+      headerMap["avih"] = AVIMainHeaderSize;
 
-      return header_map["avih"];
+      return headerMap["avih"];
    }
   
    if(type == "movi")
    {
-      unsigned long int value = framecount * height * width;
-      header_map["movi"]      = MoviSize;
+      unsigned long int value = frameCount * height * width;
+      headerMap["movi"]      = MoviSize;
 
-      return header_map["movi"] + 2 * sizeof(uint32_t);
+      return headerMap["movi"] + 2 * sizeof(uint32_t);
    }
 
    return 0;

@@ -89,18 +89,18 @@ class AviCreator
 {
    int height;
    int width;
-   int framecount;
+   int frameCount;
    
 public:
 
-   AviCreator(int _height, int _width, int _framecount)
+   AviCreator(int _height, int _width, int _frameCount)
    {  
       height     = _height;
       width      = _width;    
-      framecount = _framecount;
+      frameCount = _frameCount;
    }
    
-   std::unordered_map<std::string, unsigned long int> header_map;
+   std::unordered_map<std::string, unsigned long int> headerMap;
 
    unsigned long int FindSize(std::string);
    
@@ -124,7 +124,7 @@ public:
 
 };
 
-uint32_t MakeFourCC(std::string);
-void MakeAVIFile(uint8_t*, int , int ,int);
+   uint32_t MakeFourCC(std::string);
+   void MakeAVIFile(uint8_t*, int , int ,int);
 
 #endif

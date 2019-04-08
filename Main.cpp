@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
      
    int width      = atoi(argv[1]);
    int height     = atoi(argv[2]);
-   int framecount = atoi(argv[3]); 
+   int frameCount = atoi(argv[3]); 
  
    raw.seekg(0, std::ios::end);
    long long int length = raw.tellg();
@@ -39,36 +39,36 @@ int main(int argc, char* argv[])
    uint8_t *buffer = new uint8_t[length];
    raw.read((char *)buffer, length);
    
-   uint8_t *mainbuffer = new uint8_t[width * height];
+   uint8_t *mainBuffer = new uint8_t[width * height];
   
    int count1= 0;
    for (int count= 0; count < length; count += 3)
    {
-     mainbuffer[count1]     = buffer[count];
-     mainbuffer[count1 + 1] = ((buffer[count + 1] & (0x0F)) << 4 | (buffer[count + 2] >> 4));
+     mainBuffer[count1]     = buffer[count];
+     mainBuffer[count1 + 1] = ((buffer[count + 1] & (0x0F)) << 4 | (buffer[count + 2] >> 4));
      count1 += 2;
    }
 
    raw.close();
     
-   ConversionToImage Image(width, height); 
+   ConversionToImage image(width, height); 
   
-   Image.ExtractChannels(mainbuffer);
+   image.ExtractChannels(mainBuffer);
    
-   Image.PrintPixels(Image.red, "Red");   
-   Image.PrintPixels(Image.green1, "green1");
-   Image.PrintPixels(Image.green2, "green2");
-   Image.PrintPixels(Image.blue, "blue");
+   image.PrintPixels(image.red, "Red");   
+   image.PrintPixels(image.green1, "green1");
+   image.PrintPixels(image.green2, "green2");
+   image.PrintPixels(image.blue, "blue");
 
-   Image.ConvertlayerToImage(false, Image.red, "Red.pgm");
-   Image.ConvertlayerToImage(false, Image.green1, "Green1.pgm");
-   Image.ConvertlayerToImage(false, Image.green2, "Green2.pgm");
-   Image.ConvertlayerToImage(false, Image.blue, "Blue.pgm");
+   image.ConvertlayerToImage(false, image.red, "Red.pgm");
+   image.ConvertlayerToImage(false, image.green1, "Green1.pgm");
+   image.ConvertlayerToImage(false, image.green2, "Green2.pgm");
+   image.ConvertlayerToImage(false, image.blue, "Blue.pgm");
 
-   Image.BilinearInterpolation(mainbuffer);
-   Image.ConvertlayerToImage(true, Image.debayeredchannel, "DebayeredImage.ppm");
+   image.BilinearInterpolation(mainBuffer);
+   image.ConvertlayerToImage(true, image.debayeredChannel, "DebayeredImage.ppm");
  
-   MakeAVIFile(Image.debayeredchannel, width, height, framecount);
+   MakeAVIFile(image.debayeredChannel, width, height, frameCount);
 
    return 0;
 }

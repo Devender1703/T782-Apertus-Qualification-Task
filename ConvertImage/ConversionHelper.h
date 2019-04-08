@@ -13,12 +13,12 @@ class ConversionToImage
 {
    int width;
    int height;
-   int graywidth;
-   int grayheight;    
+   int grayWidth;
+   int grayHeight;    
 
    public: 
 
-   uint8_t *debayeredchannel;
+   uint8_t *debayeredChannel;
    uint8_t *red;
    uint8_t *green1;
    uint8_t *green2;
@@ -28,8 +28,8 @@ class ConversionToImage
    {
      width      = _width;
      height     = _height;
-     graywidth  = _width / 2;
-     grayheight = _height / 2;
+     grayWidth  = _width / 2;
+     grayHeight = _height / 2;
    }
  
    void ConvertlayerToImage(bool , uint8_t *, std::string);

@@ -6,40 +6,40 @@
 
 #include "AVIStruct.h"
 
-void AviCreator::MakeRiffHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeRiffHeader(int& offset, uint8_t* aviFile)
 {
    List riff;
    riff.FourCC   = MakeFourCC("RIFF");
-   riff.FileSize = header_map["avi "];
+   riff.FileSize = headerMap["avi "];
    riff.FileType = MakeFourCC("AVI ");
    
-   std::memcpy(&AVIFile[offset], (const void *)&riff, sizeof(List));   
+   std::memcpy(&aviFile[offset], (const void *)&riff, sizeof(List));   
    offset += sizeof(List);
 }
 
-void AviCreator::MakeHdrlHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeHdrlHeader(int& offset, uint8_t* aviFile)
 {
    List hdrl;
 
    hdrl.FourCC   = MakeFourCC("LIST");
-   hdrl.FileSize = header_map["hdrl"];
+   hdrl.FileSize = headerMap["hdrl"];
    hdrl.FileType = MakeFourCC("hdrl");
    
-   std::memcpy(&AVIFile[offset], (const void *)&hdrl, sizeof(List));
+   std::memcpy(&aviFile[offset], (const void *)&hdrl, sizeof(List));
    offset += sizeof(List);
 }
 
-void AviCreator::MakeAvihHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeAvihHeader(int& offset, uint8_t* aviFile)
 {
    AVIMainHeader avih;
    
    avih.fcc                  = MakeFourCC("avih");
-   avih.cb                   = header_map["avih"] - 8;
+   avih.cb                   = headerMap["avih"] - 8;
    avih.dwMicroSecPerFrame   = 100;
    avih.dwMaxBytesPerSec     = 1000;
    avih.dwPaddingGranularity = 0;
    avih.dwFlags              = 1;
-   avih.dwTotalFrames        = framecount;  
+   avih.dwTotalFrames        = frameCount;  
    avih.dwInitialFrames      = 0;
    avih.dwStreams            = 1;
    avih.dwSuggestedBufferSize= 100000;
@@ -50,28 +50,28 @@ void AviCreator::MakeAvihHeader(int& offset, uint8_t* AVIFile)
    avih.dwReserved[2]        = 0;
    avih.dwReserved[3]        = 0;
     
-   std::memcpy(&AVIFile[offset], (const void *)&avih, sizeof(AVIMainHeader));
+   std::memcpy(&aviFile[offset], (const void *)&avih, sizeof(AVIMainHeader));
    offset += sizeof(AVIMainHeader); 
 }
 
-void AviCreator::MakeStrlHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeStrlHeader(int& offset, uint8_t* aviFile)
 {
    List strl;
    
    strl.FourCC   = MakeFourCC("LIST");
-   strl.FileSize = header_map["strl"];
+   strl.FileSize = headerMap["strl"];
    strl.FileType = MakeFourCC("strl");
    
-   std::memcpy(&AVIFile[offset], (const void *)&strl, sizeof(List));
+   std::memcpy(&aviFile[offset], (const void *)&strl, sizeof(List));
    offset += sizeof(List);
 }
 
-void AviCreator::MakeStrhHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeStrhHeader(int& offset, uint8_t* aviFile)
 {
    AVIStreamHeader strh;
   
    strh.FourCCType          = MakeFourCC("strh");
-   strh.cb                  = header_map["strh"] - 8;
+   strh.cb                  = headerMap["strh"] - 8;
    strh.fccType             = MakeFourCC("vids");
    strh.fccHandler          = 0;
    strh.Flags               = 0;
@@ -91,22 +91,22 @@ void AviCreator::MakeStrhHeader(int& offset, uint8_t* AVIFile)
    strh.rcFrame.top         = 0;
    strh.rcFrame.bottom      = height;
    
-   std::memcpy(&AVIFile[offset], (const void *)&strh, sizeof(AVIStreamHeader));
+   std::memcpy(&aviFile[offset], (const void *)&strh, sizeof(AVIStreamHeader));
    offset += sizeof(AVIStreamHeader);
 } 
 
-void AviCreator::MakeStrfHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeStrfHeader(int& offset, uint8_t* aviFile)
 { 
    Chunk strf;  
    
    strf.Ckid   = MakeFourCC("strf");
-   strf.CkSize = header_map["strf"];
+   strf.CkSize = headerMap["strf"];
     
-   std::memcpy(&AVIFile[offset], (const void *)&strf, sizeof(Chunk));
+   std::memcpy(&aviFile[offset], (const void *)&strf, sizeof(Chunk));
    offset += sizeof(Chunk);
 }
 
-void AviCreator::MakeBitHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeBitHeader(int& offset, uint8_t* aviFile)
 {
    BitmapInfoHeader vidf;
   
@@ -122,31 +122,31 @@ void AviCreator::MakeBitHeader(int& offset, uint8_t* AVIFile)
    vidf.ClrUsed       = 0;
    vidf.ClrImportant  = 0;
  
-   std::memcpy(&AVIFile[offset], (const void *)&vidf, sizeof(BitmapInfoHeader));
+   std::memcpy(&aviFile[offset], (const void *)&vidf, sizeof(BitmapInfoHeader));
    offset += sizeof(BitmapInfoHeader);
 }
 
-void AviCreator::MakeMoviHeader(int& offset, uint8_t* AVIFile)
+void AviCreator::MakeMoviHeader(int& offset, uint8_t* aviFile)
 {
    List movi;
 
    movi.FourCC   = MakeFourCC("LIST");
-   movi.FileSize = header_map["movi"];
+   movi.FileSize = headerMap["movi"];
    movi.FileType = MakeFourCC("movi");
    
-   std::memcpy(&AVIFile[offset], (const void *)&movi, sizeof(List));
+   std::memcpy(&aviFile[offset], (const void *)&movi, sizeof(List));
    offset += sizeof(List);
 }
 
-void MakeAVIFile(uint8_t* frame, int _width, int _height, int _framecount)
+void MakeAVIFile(uint8_t* frame, int _width, int _height, int _frameCount)
 {     
-   AviCreator Avi(_height, _width, _framecount);
+   AviCreator aviObject(_height, _width, _frameCount);
      
    int offset = 0;
-   uint8_t *AVIFile = new uint8_t[220];
+   uint8_t *aviFile = new uint8_t[220];
    
-   Avi.FindSize("avi ");
-   Avi.AddNode(Avi , "avi ", offset, AVIFile);   
+   aviObject.FindSize("avi ");
+   aviObject.AddNode(aviObject , "avi ", offset, aviFile);   
 
    std::ofstream avi;
    avi.open("sample.avi", std::ios::binary);
@@ -157,13 +157,13 @@ void MakeAVIFile(uint8_t* frame, int _width, int _height, int _framecount)
      return;
    }  
 
-   avi.write(reinterpret_cast<char *>(AVIFile), offset);
+   avi.write(reinterpret_cast<char *>(aviFile), offset);
 
    Chunk vidf1;
    vidf1.Ckid   = MakeFourCC("00db");
    vidf1.CkSize = _width * _height * 3;
 
-   for (int count = 0; count < _framecount; count++)
+   for (int count = 0; count < _frameCount; count++)
    {
       avi.write(reinterpret_cast<char *>(&vidf1), sizeof(vidf1));        //  writing video data (chunk)
       avi.write(reinterpret_cast<char *>(frame), _width * _height * 3); //  actual frame
@@ -171,7 +171,7 @@ void MakeAVIFile(uint8_t* frame, int _width, int _height, int _framecount)
 
    avi.close();
 
-   delete[] AVIFile;
+   delete[] aviFile;
    delete[] frame;
 
    std::cout << "The avi file is ready" << std::endl;    
