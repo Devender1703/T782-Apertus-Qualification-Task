@@ -32,6 +32,6 @@ make
 ./Challenge width height framecount pathOFfile
 ```
 
-Note : pass path of cmakeLists.txt for cmake.
+Note : pass path of cmakeLists.txt for cmake....
 
 
