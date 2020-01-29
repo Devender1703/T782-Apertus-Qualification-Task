@@ -1,7 +1,7 @@
 # Apertus Qualification Task
 
 The applications process a RAW12 sample file contained in **sample** directory. The code extract grayscale channels from sample.raw12 
-in the form of Red , Green and blue channels. The final image is debayered using Bilinear interpolation. All the images are stored into .ppm 
+in the form of Red , Green and blue channels. The final image is debayered using Bilinear interpolation. All the pixels are stored into .ppm 
 format and grayscale in .pgm. 
 
 The code also writes a .avi file which inculdes n frames of final debayered image. The output file **sample.avi** can be opened in 
